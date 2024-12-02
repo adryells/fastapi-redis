@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  rq-dashboard:
+    image: eoranged/rq-dashboard:latest
+    container_name: rq-dashboard
+    environment:
+      - RQ_DASHBOARD_REDIS_URL=redis://redis:6379/0
+    ports:
+      - "9181:9181"
+    depends_on:
+      - redis
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
